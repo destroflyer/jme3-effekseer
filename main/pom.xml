@@ -29,7 +29,7 @@
             <!--jME3-Effekseer-->
             <dependency>
                 <groupId>com.destroflyer.jme3.effekseer</groupId>
-                <artifactId>library</artifactId>
+                <artifactId>jme3-effekseer</artifactId>
                 <version>${version.jme3-effekseer}</version>
             </dependency>
             <!--JDOM-->

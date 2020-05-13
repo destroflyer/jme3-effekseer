@@ -12,7 +12,7 @@
         <!--jME3-Effekseer-->
         <dependency>
             <groupId>com.destroflyer.jme3.effekseer</groupId>
-            <artifactId>library</artifactId>
+            <artifactId>jme3-effekseer</artifactId>
         </dependency>
         <!--jMonkeyEngine-->
         <dependency>
