@@ -7,7 +7,7 @@
         <version>0.1</version>
     </parent>
     <artifactId>library</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>org.jmonkeyengine</groupId>

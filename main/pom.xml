@@ -79,7 +79,7 @@
                 <artifactId>jme3-jogg</artifactId>
                 <version>${version.jme3}</version>
             </dependency>
-            <!--Tools-->
+            <!--Lombok-->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>

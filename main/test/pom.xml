@@ -7,7 +7,7 @@
         <version>0.1</version>
     </parent>
     <artifactId>test</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <dependencies>
         <!--jME3-Effekseer-->
         <dependency>
