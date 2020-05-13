@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.destroflyer.jme3.effekseer</groupId>
-        <artifactId>main</artifactId>
+        <artifactId>jme3-effekseer-parent</artifactId>
         <version>0.1</version>
     </parent>
     <artifactId>library</artifactId>
