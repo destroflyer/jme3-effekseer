@@ -6,8 +6,8 @@
     <version>0.1</version>
     <packaging>pom</packaging>
     <modules>
-        <module>library</module>
-        <module>test</module>
+        <module>jme3-effekseer</module>
+        <module>jme3-effekseer-test</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

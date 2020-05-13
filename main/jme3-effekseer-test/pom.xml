@@ -6,7 +6,7 @@
         <artifactId>jme3-effekseer-parent</artifactId>
         <version>0.1</version>
     </parent>
-    <artifactId>test</artifactId>
+    <artifactId>jme3-effekseer-test</artifactId>
     <packaging>jar</packaging>
     <dependencies>
         <!--jME3-Effekseer-->
