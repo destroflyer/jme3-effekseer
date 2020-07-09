@@ -36,6 +36,7 @@ public class EffekseerControl extends AbstractControl {
     private HashMap<ParticleEmitter, ParticleEmitterRendering> particleEmitterRenderings = new HashMap<>();
     private LinkedList<ParticleEmitter> oldParticleEmitters = new LinkedList<>();
     private HashMap<ParticleEmitter, ParticleEmitterRendering> oldParticleEmitterRenderings = new HashMap<>();
+    private Vector3f cameraDirection = new Vector3f(0, 0, 1);
 
     @Override
     protected void controlUpdate(float tpf) {
@@ -76,23 +77,7 @@ public class EffekseerControl extends AbstractControl {
 
     @Override
     protected void controlRender(RenderManager renderManager, ViewPort viewPort) {
-        for (ParticleEmitterRendering particleEmitterRendering : particleEmitterRenderings.values()) {
-            if (particleEmitterRendering instanceof MergedParticleEmitterRendering) {
-                MergedParticleEmitterRendering mergedParticleEmitterRendering = (MergedParticleEmitterRendering) particleEmitterRendering;
-                Geometry mergedGeometry = mergedParticleEmitterRendering.getMergedGeometry();
-                MergedParticlesMesh mergedParticlesMesh = (MergedParticlesMesh) mergedGeometry.getMesh();
-                mergedParticlesMesh.setCameraDirection(viewPort.getCamera().getDirection());
-                mergedParticlesMesh.updateBuffers();
-                // Choose the first particle to determine the uv scrolling progress
-                Particle firstParticle = mergedParticleEmitterRendering.getParticles().get(0);
-                GeometryFactory.updateGeometry(firstParticle, mergedGeometry);
-            }
-            for (Particle particle : particleEmitterRendering.getParticles()) {
-                if (particle.getGeometry() != null) {
-                    GeometryFactory.updateParticleGeometry(particle);
-                }
-            }
-        }
+        cameraDirection.set(viewPort.getCamera().getDirection());
     }
 
     private void start() {
@@ -266,11 +251,17 @@ public class EffekseerControl extends AbstractControl {
         if (particleEmitterRendering instanceof MergedParticleEmitterRendering) {
             MergedParticleEmitterRendering mergedParticleEmitterRendering = (MergedParticleEmitterRendering) particleEmitterRendering;
             if (mergedParticleEmitterRendering.getMergedGeometry() != null) {
-                MergedParticlesMesh mergedParticlesMesh = (MergedParticlesMesh) mergedParticleEmitterRendering.getMergedGeometry().getMesh();
+                Geometry mergedGeometry = mergedParticleEmitterRendering.getMergedGeometry();
+                MergedParticlesMesh mergedParticlesMesh = (MergedParticlesMesh) mergedGeometry.getMesh();
+                // Logical update (Choose the last particle to determine the drawing progress)
                 EffectiveDrawingValues effectiveDrawingValues = mergedParticlesMesh.getEffectiveDrawingValues();
-                // Choose the last particle to determine the drawing progress
                 Particle lastParticle = mergedParticleEmitterRendering.getParticles().get(mergedParticleEmitterRendering.getParticles().size() - 1);
                 updateCurrentDrawingValue(lastParticle, effectiveDrawingValues, frameProgress);
+                // Visual update (Choose the first particle to determine the uv scrolling progress)
+                mergedParticlesMesh.setCameraDirection(cameraDirection);
+                mergedParticlesMesh.updateBuffers();
+                Particle firstParticle = mergedParticleEmitterRendering.getParticles().get(0);
+                GeometryFactory.updateGeometry(firstParticle, mergedGeometry);
             }
         }
     }
@@ -280,6 +271,7 @@ public class EffekseerControl extends AbstractControl {
             updateTransform(particle, frameProgress);
             if (particle.getEffectiveDrawingValues() != null) {
                 if (particle.getGeometry() != null) {
+                    GeometryFactory.updateParticleGeometry(particle);
                     particle.getGeometry().setLocalTransform(particle.getTransform());
                 }
                 updateCurrentDrawingValue(particle, particle.getEffectiveDrawingValues(), frameProgress);
