@@ -16,7 +16,7 @@ public abstract class ToothMesh<EDV extends EffectiveDrawingValues, DV extends D
         int toothCount = getToothCount();
         float centerRatio = getCenterRatio();
         // Each segment has 4 triangles (2 per tooth)
-        for (int i = 0; i < (toothCount * 4); i++) {
+        for (int i = 0; i < ((toothCount - 1) * 4); i++) {
             indices.add((short) (currentIndex + 1));
             indices.add(currentIndex);
             indices.add((short) (currentIndex + 2));
