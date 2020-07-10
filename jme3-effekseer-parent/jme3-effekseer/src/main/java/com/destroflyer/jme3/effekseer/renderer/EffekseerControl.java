@@ -159,9 +159,9 @@ public class EffekseerControl extends AbstractControl {
                     EffectiveUvValues effectiveUvValues = generateEffectiveUvValues(particleNode.getRendererCommonValues().getUvValues());
                     if (drawingValues instanceof TrackDrawingValues) {
                         EffectiveDrawingValues effectiveDrawingValues = generateEffectiveDrawingValues(drawingValues);
-                        mergedGeometry = GeometryFactory.createGeometry_Track(particleNode, effectiveUvValues, (EffectiveTrackDrawingValues) effectiveDrawingValues, particles, assetManager);
+                        mergedGeometry = GeometryFactory.createGeometry_Track(particleNode, effectiveUvValues, (EffectiveTrackDrawingValues) effectiveDrawingValues, particles, assetManager, particleEffect.getDirectory());
                     } else {
-                        mergedGeometry = GeometryFactory.createGeometry_Ribbon(particleNode, effectiveUvValues, particles, assetManager);
+                        mergedGeometry = GeometryFactory.createGeometry_Ribbon(particleNode, effectiveUvValues, particles, assetManager, particleEffect.getDirectory());
                     }
                     attachToRoot(mergedGeometry);
                     mergedParticleEmitterRendering.setMergedGeometry(mergedGeometry);
@@ -191,9 +191,9 @@ public class EffekseerControl extends AbstractControl {
             if (isRendered(particleNode)) {
                 Geometry geometry;
                 if (drawingValues instanceof SpriteDrawingValues) {
-                    geometry = GeometryFactory.createGeometry_Sprite(particleNode, particle.getEffectiveUvValues(), assetManager);
+                    geometry = GeometryFactory.createGeometry_Sprite(particleNode, particle.getEffectiveUvValues(), assetManager, particleEffect.getDirectory());
                 } else {
-                    geometry = GeometryFactory.createGeometry_Ring(particleNode, particle.getEffectiveUvValues(), (EffectiveRingDrawingValues) effectiveDrawingValues, assetManager);
+                    geometry = GeometryFactory.createGeometry_Ring(particleNode, particle.getEffectiveUvValues(), (EffectiveRingDrawingValues) effectiveDrawingValues, assetManager, particleEffect.getDirectory());
                 }
                 attachToRoot(geometry);
                 particle.setGeometry(geometry);

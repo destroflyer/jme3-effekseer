@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 public class GeometryFactory {
 
-    static Geometry createGeometry_Sprite(ParticleNode particleNode, EffectiveUvValues effectiveUvValues, AssetManager assetManager) {
+    static Geometry createGeometry_Sprite(ParticleNode particleNode, EffectiveUvValues effectiveUvValues, AssetManager assetManager, String effectDirectory) {
         SpriteDrawingValues spriteDrawingValues = (SpriteDrawingValues) particleNode.getDrawingValues();
-        Texture texture = loadTexture(particleNode, assetManager);
+        Texture texture = loadTexture(particleNode, assetManager, effectDirectory);
         SpriteVertexPositions spriteVertexPositions = spriteDrawingValues.getVertexPositions();
         SpriteMesh spriteMesh = new SpriteMesh(effectiveUvValues, spriteVertexPositions);
         spriteMesh.initialize(texture);
@@ -30,29 +30,29 @@ public class GeometryFactory {
         return geometry;
     }
 
-    static Geometry createGeometry_Track(ParticleNode particleNode, EffectiveUvValues effectiveUvValues, EffectiveTrackDrawingValues effectiveTrackDrawingValues, ArrayList<Particle> trackParticles, AssetManager assetManager) {
+    static Geometry createGeometry_Track(ParticleNode particleNode, EffectiveUvValues effectiveUvValues, EffectiveTrackDrawingValues effectiveTrackDrawingValues, ArrayList<Particle> trackParticles, AssetManager assetManager, String effectDirectory) {
         TrackDrawingValues trackDrawingValues = (TrackDrawingValues) particleNode.getDrawingValues();
         TrackMesh trackMesh = new TrackMesh(effectiveUvValues, effectiveTrackDrawingValues, trackDrawingValues, trackParticles);
-        return createGeometry_Custom(particleNode, trackMesh, assetManager);
+        return createGeometry_Custom(particleNode, trackMesh, assetManager, effectDirectory);
     }
 
-    static Geometry createGeometry_Ribbon(ParticleNode particleNode, EffectiveUvValues effectiveUvValues, ArrayList<Particle> ribbonParticles, AssetManager assetManager) {
+    static Geometry createGeometry_Ribbon(ParticleNode particleNode, EffectiveUvValues effectiveUvValues, ArrayList<Particle> ribbonParticles, AssetManager assetManager, String effectDirectory) {
         RibbonDrawingValues ribbonDrawingValues = (RibbonDrawingValues) particleNode.getDrawingValues();
         RibbonMesh ribbonMesh = new RibbonMesh(effectiveUvValues, ribbonDrawingValues, ribbonParticles);
-        return createGeometry_Custom(particleNode, ribbonMesh, assetManager);
+        return createGeometry_Custom(particleNode, ribbonMesh, assetManager, effectDirectory);
     }
 
-    static Geometry createGeometry_Ring(ParticleNode particleNode, EffectiveUvValues effectiveUvValues, EffectiveRingDrawingValues effectiveRingDrawingValues, AssetManager assetManager) {
+    static Geometry createGeometry_Ring(ParticleNode particleNode, EffectiveUvValues effectiveUvValues, EffectiveRingDrawingValues effectiveRingDrawingValues, AssetManager assetManager, String effectDirectory) {
         RingDrawingValues ringDrawingValues = (RingDrawingValues) particleNode.getDrawingValues();
         RingMesh ringMesh = new RingMesh(effectiveUvValues, effectiveRingDrawingValues, ringDrawingValues);
-        Geometry geometry = createGeometry_Custom(particleNode, ringMesh, assetManager);
+        Geometry geometry = createGeometry_Custom(particleNode, ringMesh, assetManager, effectDirectory);
         setBillboard(geometry, ringDrawingValues.getBillboard());
         return geometry;
     }
 
-    static Geometry createGeometry_Custom(ParticleNode particleNode, ParticleMesh particleMesh, AssetManager assetManager) {
+    static Geometry createGeometry_Custom(ParticleNode particleNode, ParticleMesh particleMesh, AssetManager assetManager, String effectDirectory) {
         Geometry geometry = new Geometry(particleNode.getName(), particleMesh);
-        Texture texture = loadTexture(particleNode, assetManager);
+        Texture texture = loadTexture(particleNode, assetManager, effectDirectory);
         particleMesh.initialize(texture);
         Material material = createUnshadedMaterialWithTexture(texture, assetManager);
         material.setBoolean("VertexColor", true);
@@ -103,13 +103,13 @@ public class GeometryFactory {
         return material;
     }
 
-    private static Texture loadTexture(ParticleNode particleNode, AssetManager assetManager) {
+    private static Texture loadTexture(ParticleNode particleNode, AssetManager assetManager, String effectDirectory) {
         RendererCommonValues rendererCommonValues = particleNode.getRendererCommonValues();
         String texturePath = rendererCommonValues.getColorTexture();
         // TODO: Research what referencing effekseer files as texture actually does
         if ((texturePath != null) && (!texturePath.endsWith(".efkproj"))) {
             try {
-                Texture texture = assetManager.loadTexture(new TextureKey(texturePath, false));
+                Texture texture = assetManager.loadTexture(new TextureKey(effectDirectory + texturePath, false));
                 // TODO: Support Clamp
                 texture.setWrap(Texture.WrapMode.Repeat);
                 return texture;

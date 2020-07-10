@@ -23,23 +23,28 @@ public class EffekseerReader {
     private static final Vector2f DEFAULT_RING_POSITION_INNER = new Vector2f(1, 0);
     private static final Vector2f DEFAULT_RIBBON_POSITION = new Vector2f(-0.5f, 0.5f);
 
-    public ParticleEffect read(File file) {
+    public ParticleEffect read(String assetRoot, File file) {
         try {
             Document document = new SAXBuilder().build(file);
-            return parseParticleEffect(document.getRootElement());
+            return parseParticleEffect(getRelativizedParentDirectory(assetRoot, file), document.getRootElement());
         } catch (JDOMException | IOException ex) {
             ex.printStackTrace();
         }
         return null;
     }
 
-    public ParticleEffect parseParticleEffect(Element element) {
+    private String getRelativizedParentDirectory(String assetRoot, File file) {
+        return new File(assetRoot).toURI().relativize(file.getParentFile().toURI()).getPath();
+    }
+
+    public ParticleEffect parseParticleEffect(String directory, Element element) {
         RootNode root = parseRootNode(element.getChild("Root"));
         int startFrame = parseInteger(element.getChild("StartFrame"), 0);
         int endFrame = parseInteger(element.getChild("EndFrame"), 120);
         boolean isLoop = parseBoolean(element.getChild("IsLoop"), true);
 
         return ParticleEffect.builder()
+                .directory(directory)
                 .root(root)
                 .startFrame(startFrame)
                 .endFrame(endFrame)

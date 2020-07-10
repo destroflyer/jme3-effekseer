@@ -14,6 +14,7 @@ public class TestParticleEffects {
     public TestParticleEffects() {
         initializeInfo();
     }
+    public static final String ASSET_ROOT = "./";
     private EffekseerReader effekseerReader = new EffekseerReader();
     private final TreeMap<String, TestParticleEffectInfo> testParticleEffectInfoMap = new TreeMap<>();
 
@@ -361,7 +362,7 @@ public class TestParticleEffects {
             TestParticleEffectInfo info = entry.getValue();
             if ((info != null) && ((quality == null) || (info.getQuality() == quality))) {
                 File file = new File("./samples/" + entry.getKey() + ".efkproj");
-                ParticleEffect particleEffect = effekseerReader.read(file);
+                ParticleEffect particleEffect = effekseerReader.read(ASSET_ROOT, file);
                 TestParticleEffect testParticleEffect = TestParticleEffect.builder()
                         .directory(file.getParent())
                         .fileName(file.getName())

@@ -33,6 +33,7 @@ public class TestApplication extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        assetManager.registerLocator(TestParticleEffects.ASSET_ROOT, FileLocator.class);
         stateManager.detach(stateManager.getState(StatsAppState.class));
         testParticleEffects = new TestParticleEffects().getTestParticleEffects(2);
         currentParticleEffectIndex = -1;
@@ -52,16 +53,11 @@ public class TestApplication extends SimpleApplication {
     }
 
     private void playNextParticleEffect() {
-        if (currentParticleEffectIndex != -1) {
-            TestParticleEffect oldTestParticleEffect = testParticleEffects.get(currentParticleEffectIndex);
-            assetManager.unregisterLocator(oldTestParticleEffect.getDirectory(), FileLocator.class);
-        }
         currentParticleEffectIndex++;
         if (currentParticleEffectIndex < testParticleEffects.size()) {
             TestParticleEffect newTestParticleEffect = testParticleEffects.get(currentParticleEffectIndex);
             TestParticleEffectInfo testParticleEffectInfo = newTestParticleEffect.getInfo();
             System.out.println("Playing " + newTestParticleEffect.getFileName());
-            assetManager.registerLocator(newTestParticleEffect.getDirectory(), FileLocator.class);
             ParticleEffectSettings particleEffectSettings = ParticleEffectSettings.builder()
                     .frameLength(testParticleEffectInfo.getFrameLength())
                     .loop(false)
