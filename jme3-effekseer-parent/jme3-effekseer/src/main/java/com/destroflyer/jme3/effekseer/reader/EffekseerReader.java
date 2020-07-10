@@ -23,6 +23,10 @@ public class EffekseerReader {
     private static final Vector2f DEFAULT_RING_POSITION_INNER = new Vector2f(1, 0);
     private static final Vector2f DEFAULT_RIBBON_POSITION = new Vector2f(-0.5f, 0.5f);
 
+    public ParticleEffect read(String assetRoot, String filePath) {
+        return read(assetRoot, new File(filePath));
+    }
+
     public ParticleEffect read(String assetRoot, File file) {
         try {
             Document document = new SAXBuilder().build(file);
