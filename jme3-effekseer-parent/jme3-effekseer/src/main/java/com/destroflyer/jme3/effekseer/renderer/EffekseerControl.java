@@ -233,12 +233,14 @@ public class EffekseerControl extends AbstractControl {
         particle.setEffectiveRotationValues(generateEffectiveDynamicValues(particleNode.getRotationValues()));
         particle.setEffectiveScalingValues(generateEffectiveDynamicValues(particleNode.getScalingValues()));
 
-        particle.setTransform(new Transform());
-        updateTransform(particle, 0);
-
         float life = generateRangeValue1f(particleNode.getCommonValues().getLife());
         particle.setStartingLife(life);
         particle.setRemainingLife(life);
+
+        // Update the transform after setting the life as it can have influence (e.g. easing)
+        particle.setTransform(new Transform());
+        updateTransform(particle, 0);
+
         particle.setEffectiveUvValues(generateEffectiveUvValues(particleNode.getRendererCommonValues().getUvValues()));
     }
 
