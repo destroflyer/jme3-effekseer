@@ -6,28 +6,24 @@
         <artifactId>jme3-effekseer-parent</artifactId>
         <version>0.1</version>
     </parent>
-    <artifactId>jme3-effekseer-test</artifactId>
+    <artifactId>jme3-effekseer-native</artifactId>
     <packaging>jar</packaging>
     <dependencies>
-        <dependency>
-            <groupId>com.destroflyer.jme3.effekseer</groupId>
-            <artifactId>jme3-effekseer-native</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.destroflyer.jme3.effekseer</groupId>
-            <artifactId>jme3-effekseer-virtual</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.jmonkeyengine</groupId>
             <artifactId>jme3-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jmonkeyengine</groupId>
-            <artifactId>jme3-lwjgl3</artifactId>
+            <artifactId>jme3-desktop</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jmonkeyengine</groupId>
-            <artifactId>jme3-desktop</artifactId>
+            <groupId>effekseer</groupId>
+            <artifactId>effekseer-native</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 </project>

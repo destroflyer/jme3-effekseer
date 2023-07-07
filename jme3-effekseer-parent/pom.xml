@@ -6,22 +6,23 @@
     <version>0.1</version>
     <packaging>pom</packaging>
     <modules>
-        <module>jme3-effekseer</module>
+        <module>jme3-effekseer-virtual</module>
+        <module>jme3-effekseer-native</module>
         <module>jme3-effekseer-test</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <version.effekseer>81957c3</version.effekseer>
         <version.jme3-effekseer>0.1</version.jme3-effekseer>
         <version.jdom>2.0.6</version.jdom>
-        <version.jme3>3.2.1-stable</version.jme3>
-        <version.lombok>1.18.6</version.lombok>
+        <version.jme3>3.6.0-stable</version.jme3>
+        <version.lombok>1.18.28</version.lombok>
+        <version.maven-compiler-plugin>3.11.0</version.maven-compiler-plugin>
     </properties>
     <repositories>
         <repository>
-            <id>jcenter</id>
-            <url>https://jcenter.bintray.com</url>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/riccardobl/EffekseerForMultiLanguages</url>
         </repository>
     </repositories>
     <dependencyManagement>
@@ -29,14 +30,13 @@
             <!--jME3-Effekseer-->
             <dependency>
                 <groupId>com.destroflyer.jme3.effekseer</groupId>
-                <artifactId>jme3-effekseer</artifactId>
+                <artifactId>jme3-effekseer-virtual</artifactId>
                 <version>${version.jme3-effekseer}</version>
             </dependency>
-            <!--JDOM-->
             <dependency>
-                <groupId>org.jdom</groupId>
-                <artifactId>jdom2</artifactId>
-                <version>${version.jdom}</version>
+                <groupId>com.destroflyer.jme3.effekseer</groupId>
+                <artifactId>jme3-effekseer-native</artifactId>
+                <version>${version.jme3-effekseer}</version>
             </dependency>
             <!--jMonkeyEngine-->
             <dependency>
@@ -46,12 +46,7 @@
             </dependency>
             <dependency>
                 <groupId>org.jmonkeyengine</groupId>
-                <artifactId>jme3-networking</artifactId>
-                <version>${version.jme3}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jmonkeyengine</groupId>
-                <artifactId>jme3-lwjgl</artifactId>
+                <artifactId>jme3-lwjgl3</artifactId>
                 <version>${version.jme3}</version>
             </dependency>
             <dependency>
@@ -59,25 +54,17 @@
                 <artifactId>jme3-desktop</artifactId>
                 <version>${version.jme3}</version>
             </dependency>
+            <!--Effekseer-->
             <dependency>
-                <groupId>org.jmonkeyengine</groupId>
-                <artifactId>jme3-terrain</artifactId>
-                <version>${version.jme3}</version>
+                <groupId>effekseer</groupId>
+                <artifactId>effekseer-native</artifactId>
+                <version>${version.effekseer}</version>
             </dependency>
+            <!--JDOM-->
             <dependency>
-                <groupId>org.jmonkeyengine</groupId>
-                <artifactId>jme3-effects</artifactId>
-                <version>${version.jme3}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jmonkeyengine</groupId>
-                <artifactId>jme3-niftygui</artifactId>
-                <version>${version.jme3}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jmonkeyengine</groupId>
-                <artifactId>jme3-jogg</artifactId>
-                <version>${version.jme3}</version>
+                <groupId>org.jdom</groupId>
+                <artifactId>jdom2</artifactId>
+                <version>${version.jdom}</version>
             </dependency>
             <!--Lombok-->
             <dependency>
@@ -87,4 +74,17 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${version.maven-compiler-plugin}</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
