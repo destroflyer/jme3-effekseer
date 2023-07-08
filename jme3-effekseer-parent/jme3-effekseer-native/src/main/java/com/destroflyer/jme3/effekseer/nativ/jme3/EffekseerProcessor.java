@@ -26,7 +26,9 @@ public class EffekseerProcessor implements SceneProcessor {
     protected boolean initialized;
     protected RenderManager renderManager;
     protected ViewPort vp;
-    protected boolean sRGB,isOrthographic,hasDepth;
+    protected boolean sRGB;
+    protected boolean isOrthographic;
+    protected boolean hasDepth;
 
     public EffekseerRenderer getRenderer() {
         return renderer;

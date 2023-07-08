@@ -17,26 +17,29 @@ import com.jme3.texture.Texture;
 public class EffekseerRenderer {
 
     public static EffekseerRenderer addToViewPort(AppStateManager stateManager, ViewPort vp, AssetManager am, boolean sRGB) {
-        return addToViewPort(stateManager,vp,am,sRGB,false);
+        return addToViewPort(stateManager, vp, am, sRGB, false);
     }
 
-    public static EffekseerRenderer addToViewPort(AppStateManager stateManager, ViewPort vp, AssetManager am, boolean sRGB, boolean is2D) {
+    public static EffekseerRenderer addToViewPort(AppStateManager stateManager, ViewPort vp, AssetManager am, boolean sRGB, boolean isOrthographic) {
+        return addToViewPort(stateManager, vp, am, sRGB, isOrthographic, true);
+    }
+
+    public static EffekseerRenderer addToViewPort(AppStateManager stateManager, ViewPort vp, AssetManager am, boolean sRGB, boolean isOrthographic, boolean hasDepth) {
         if (stateManager.getState(EffekseerUpdater.class) == null) {
             stateManager.attach(new EffekseerUpdater());
         }
 
         FilterPostProcessor fpp = null;
-        Boolean hasDepth = null;
         if (!vp.getName().equals("Gui Default")) { // Detect when attached to default guiViewPort in jme.
             for (SceneProcessor p:vp.getProcessors()) {
                 if (p instanceof FilterPostProcessor) {
-                    fpp = (FilterPostProcessor)p;
+                    fpp = (FilterPostProcessor) p;
                     break;
                 }
             }
         } else {
             // System.out.println("Detected default Gui View Port");
-            is2D = true;
+            isOrthographic = true;
             hasDepth = false;
         }
 
@@ -45,15 +48,7 @@ public class EffekseerRenderer {
             fpp.addFilter(filter);
             return filter.getRenderer();
         } else {
-            if (hasDepth == null) {
-                FrameBuffer ofb = vp.getOutputFrameBuffer();
-                if (ofb != null) {
-                    hasDepth = ofb.getDepthBuffer() != null;
-                }
-            }
-            hasDepth = true;
-
-            EffekseerProcessor p = new EffekseerProcessor(am, sRGB, is2D, hasDepth);
+            EffekseerProcessor p = new EffekseerProcessor(am, sRGB, isOrthographic, hasDepth);
             vp.addProcessor(p);
             return p.getRenderer();
         }
