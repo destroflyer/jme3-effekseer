@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.destroflyer.jme3.effekseer</groupId>
     <artifactId>jme3-effekseer-parent</artifactId>
-    <version>0.1</version>
+    <version>0.0.1</version>
     <packaging>pom</packaging>
     <modules>
         <module>jme3-effekseer-virtual</module>
@@ -15,7 +15,7 @@
         <maven.compiler.target>18</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <version.effekseer>81957c3</version.effekseer>
-        <version.jme3-effekseer>0.1</version.jme3-effekseer>
+        <version.jme3-effekseer>0.0.1</version.jme3-effekseer>
         <version.jdom>2.0.6</version.jdom>
         <version.jme3>3.6.0-stable</version.jme3>
         <version.lombok>1.18.28</version.lombok>

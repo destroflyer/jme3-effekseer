@@ -4,10 +4,13 @@
     <parent>
         <groupId>com.destroflyer.jme3.effekseer</groupId>
         <artifactId>jme3-effekseer-parent</artifactId>
-        <version>0.1</version>
+        <version>0.0.1</version>
     </parent>
     <artifactId>jme3-effekseer-native</artifactId>
     <packaging>jar</packaging>
+    <properties>
+        <version.maven-shade-plugin>3.5.0</version.maven-shade-plugin>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.jmonkeyengine</groupId>
@@ -26,4 +29,29 @@
             <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${version.maven-shade-plugin}</version>
+                <configuration>
+                    <artifactSet>
+                        <includes>
+                            <include>effekseer:effekseer-native</include>
+                        </includes>
+                    </artifactSet>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

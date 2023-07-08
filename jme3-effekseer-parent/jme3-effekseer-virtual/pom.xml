@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.destroflyer.jme3.effekseer</groupId>
         <artifactId>jme3-effekseer-parent</artifactId>
-        <version>0.1</version>
+        <version>0.0.1</version>
     </parent>
     <artifactId>jme3-effekseer-virtual</artifactId>
     <packaging>jar</packaging>
