@@ -14,18 +14,13 @@
         <maven.compiler.source>18</maven.compiler.source>
         <maven.compiler.target>18</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <version.effekseer>81957c3</version.effekseer>
+        <version.effekseer-native>81957c3</version.effekseer-native>
         <version.jme3-effekseer>0.0.1</version.jme3-effekseer>
         <version.jdom>2.0.6</version.jdom>
         <version.jme3>3.6.0-stable</version.jme3>
         <version.lombok>1.18.28</version.lombok>
+        <version.maven-install-plugin>3.1.1</version.maven-install-plugin>
     </properties>
-    <repositories>
-        <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/riccardobl/EffekseerForMultiLanguages</url>
-        </repository>
-    </repositories>
     <dependencyManagement>
         <dependencies>
             <!--jME3-Effekseer-->
@@ -59,7 +54,7 @@
             <dependency>
                 <groupId>effekseer</groupId>
                 <artifactId>effekseer-native</artifactId>
-                <version>${version.effekseer}</version>
+                <version>${version.effekseer-native}</version>
             </dependency>
             <!--JDOM-->
             <dependency>
@@ -75,4 +70,29 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>${version.maven-install-plugin}</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <groupId>effekseer</groupId>
+                            <artifactId>effekseer-native</artifactId>
+                            <version>${version.effekseer-native}</version>
+                            <file>${project.basedir}/libs/effekseer-native-${version.effekseer-native}.jar</file>
+                            <packaging>jar</packaging>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
