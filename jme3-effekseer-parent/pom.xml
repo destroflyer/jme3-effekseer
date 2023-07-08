@@ -11,8 +11,8 @@
         <module>jme3-effekseer-test</module>
     </modules>
     <properties>
-        <maven.compiler.source>18</maven.compiler.source>
-        <maven.compiler.target>18</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <version.effekseer-native>81957c3</version.effekseer-native>
         <version.jme3-effekseer>0.0.1</version.jme3-effekseer>
