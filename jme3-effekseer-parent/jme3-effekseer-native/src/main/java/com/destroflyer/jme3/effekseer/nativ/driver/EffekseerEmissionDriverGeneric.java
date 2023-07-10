@@ -34,7 +34,7 @@ public class EffekseerEmissionDriverGeneric implements EffekseerEmissionDriver{
         if (callback != null) {
             Integer handle = emitInstanceAndGetHandle.emit();
             callback.call(CallbackType.SET_HANDLE, handle);
-            instances.put(handle,callback);
+            instances.put(handle, callback);
             return handle;
         }
         return null;
@@ -44,7 +44,7 @@ public class EffekseerEmissionDriverGeneric implements EffekseerEmissionDriver{
     public void destroy(int handle) {
         EffekseerEmissionCallback callback = instances.remove(handle);
         if (callback != null) {
-            callback.call(CallbackType.DESTROY_HANDLE,handle);
+            callback.call(CallbackType.DESTROY_HANDLE, handle);
         }
     }
 

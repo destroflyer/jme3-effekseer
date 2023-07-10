@@ -57,6 +57,12 @@ public class EffekseerProcessor implements SceneProcessor {
 
     @Override
     public void preFrame(float tpf) {
+        for (EffekseerControl control : controls) {
+            // Ensure the native objects are properly cleanuped before garbage collection kicks in (and crashes)
+            if (viewPort.getScenes().stream().noneMatch(control::isChildOf)) {
+                control.destroy();
+            }
+        }
         controls.clear();
         for (Spatial scene : viewPort.getScenes()) {
             scene.depthFirstTraversal(spatial -> {

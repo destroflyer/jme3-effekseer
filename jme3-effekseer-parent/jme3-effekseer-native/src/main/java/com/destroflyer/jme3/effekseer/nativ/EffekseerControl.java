@@ -152,8 +152,12 @@ public class EffekseerControl extends AbstractControl {
 
     }
 
+    void destroy() {
+        manager.destroy();
+    }
+
     @Override
-    public void finalize() {        
+    public void finalize() {
         garbagePile.add(instances);
     }
 }

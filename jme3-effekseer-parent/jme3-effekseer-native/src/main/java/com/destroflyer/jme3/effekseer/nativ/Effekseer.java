@@ -39,4 +39,8 @@ public class Effekseer {
         viewPort.addProcessor(processor);
         return processor;
     }
+
+    public static void destroy() {
+        EffekseerBackendCore.Terminate();
+    }
 }

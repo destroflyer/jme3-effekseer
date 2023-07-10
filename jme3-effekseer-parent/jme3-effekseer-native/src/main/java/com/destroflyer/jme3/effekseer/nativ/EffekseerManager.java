@@ -1,6 +1,5 @@
 package com.destroflyer.jme3.effekseer.nativ;
 
-import Effekseer.swig.EffekseerBackendCore;
 import Effekseer.swig.EffekseerEffectCore;
 import Effekseer.swig.EffekseerManagerCore;
 import com.jme3.math.Matrix4f;
@@ -52,18 +51,6 @@ public class EffekseerManager {
         state.core.Initialize(8000, sRGB);
     }
 
-    /**
-     * Destroy the Effekseer instance
-     */
-    public void destroy() {
-        state.core.delete();
-        EffekseerBackendCore.Terminate();
-    }
-
-    /**
-     * Update the Effekseer instance
-     * @param tpf time in seconds
-     */
     public void update(float tpf) {
         while (state.garbagePile.size() != 0) {
             List<Integer> garbage = state.garbagePile.poll();
@@ -232,5 +219,9 @@ public class EffekseerManager {
     public void registerEmitter(EffekseerControl control) {
         state.emitters.put(control, new EmitterState());
         control.setGarbagePile(state.garbagePile);
+    }
+
+    public void destroy() {
+        state.core.delete();
     }
 }
