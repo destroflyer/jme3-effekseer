@@ -61,7 +61,7 @@ public class EffekseerProcessor implements SceneProcessor {
         for (Spatial scene : viewPort.getScenes()) {
             scene.depthFirstTraversal(spatial -> {
                 EffekseerControl control = spatial.getControl(EffekseerControl.class);
-                if (control != null) {
+                if ((control != null) && control.isInitialized()) {
                     controls.add(control);
                 }
             });

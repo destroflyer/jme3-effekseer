@@ -31,6 +31,8 @@ public class EffekseerControl extends AbstractControl {
     @Getter(AccessLevel.PACKAGE)
     private EffekseerManager manager;
     private EffekseerEffectCore effect;
+    @Getter
+    private boolean initialized;
     private boolean play = true;
     @Setter
     private float speed = 1;
@@ -115,14 +117,17 @@ public class EffekseerControl extends AbstractControl {
             return;
         }
 
-        manager.ensureInitialized(Effekseer.IS_SRGB);
+        if (!initialized) {
+            manager.initialize(Effekseer.IS_SRGB);
+            initialized = true;
+        }
 
         Integer newHandle = driver.tryEmit(() -> manager.playEffect(effect));
 
         if (newHandle != null) {
             instances.add(newHandle);
             manager.setEffectLayer(newHandle, layer);
-        }  
+        }
 
         for (int i = 0; i < instances.size(); i++) {
             Integer handle = instances.get(i);
@@ -131,7 +136,7 @@ public class EffekseerControl extends AbstractControl {
                 instances.remove(i);
                 i--;
             } else {
-                driver.setDynamicInputs(handle, (index,value) -> manager.setDynamicInput(handle, index, value));
+                driver.setDynamicInputs(handle, (index, value) -> manager.setDynamicInput(handle, index, value));
                 Transform transform = driver.getInstanceTransform(handle, spatial);
                 manager.setEffectTransform(handle, transform);
             }

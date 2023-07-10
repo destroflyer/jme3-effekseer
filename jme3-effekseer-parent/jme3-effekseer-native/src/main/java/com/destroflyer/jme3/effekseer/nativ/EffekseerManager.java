@@ -38,7 +38,6 @@ public class EffekseerManager {
             v1SpatialList.add(null);
         }
         private boolean asyncInit = false;
-        private boolean isNew = true;
         private ConcurrentLinkedQueue<List<Integer>> garbagePile = new ConcurrentLinkedQueue<>();
     }
 
@@ -49,11 +48,8 @@ public class EffekseerManager {
         }
     }
 
-    public void ensureInitialized(Boolean sRGB) {
-        if (state.isNew && sRGB != null) {
-            state.isNew = false;
-            state.core.Initialize(8000,sRGB);
-        }
+    public void initialize(boolean sRGB) {
+        state.core.Initialize(8000, sRGB);
     }
 
     /**
