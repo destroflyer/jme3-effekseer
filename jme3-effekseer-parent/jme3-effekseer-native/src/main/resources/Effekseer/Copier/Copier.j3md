@@ -10,9 +10,6 @@ MaterialDef Copier {
         VertexShader GLSL100 GLSL150 : Effekseer/Copier/Copier.vert
         FragmentShader GLSL100 GLSL150 : Effekseer/Copier/Copier.frag
 
-        WorldParameters {
-        }
-
         Defines {
             COLOR : Color
             DEPTH : Depth

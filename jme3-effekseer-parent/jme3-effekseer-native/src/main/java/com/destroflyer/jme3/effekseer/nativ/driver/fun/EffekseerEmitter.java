@@ -1,6 +1,6 @@
 package com.destroflyer.jme3.effekseer.nativ.driver.fun;
 
-public interface EffekseerEmitFun{
+public interface EffekseerEmitter {
 
     Integer emit();
 }

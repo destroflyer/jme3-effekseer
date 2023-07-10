@@ -1,10 +1,12 @@
 package com.destroflyer.jme3.effekseer.test;
 
-import com.destroflyer.jme3.effekseer.nativ.EffekseerEmitterControl;
-import com.destroflyer.jme3.effekseer.nativ.jme3.EffekseerRenderer;
+import com.destroflyer.jme3.effekseer.nativ.Effekseer;
+import com.destroflyer.jme3.effekseer.nativ.EffekseerControl;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.FileLocator;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 
 public class TestApplicationNative extends SimpleApplication {
@@ -15,6 +17,7 @@ public class TestApplicationNative extends SimpleApplication {
         settings.setTitle("jme3-effekseer-native");
         settings.setWidth(1600);
         settings.setHeight(900);
+        settings.setGammaCorrection(false);
         testApplication.setSettings(settings);
         testApplication.setShowSettings(false);
         testApplication.start();
@@ -23,8 +26,16 @@ public class TestApplicationNative extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         assetManager.registerLocator(TestParticleEffects.ASSET_ROOT, FileLocator.class);
-        EffekseerRenderer.addToViewPort(stateManager, viewPort, assetManager, context.getSettings().isGammaCorrection());
-        rootNode.addControl(new EffekseerEmitterControl(assetManager, "samples/Pierre01/LightningStrike.efkefc"));
-        cam.setLocation(new Vector3f(0, 13, 90));
+        Effekseer.registerLoader(assetManager);
+        Effekseer.addToViewPort(viewPort, assetManager, context.getSettings().isGammaCorrection());
+        for (int i = 0; i < 2; i++) {
+            Node node = new Node();
+            node.move((i - 0.5f) * 100, 0, 0);
+            EffekseerControl control = new EffekseerControl(assetManager, "samples/Pierre01/LightningStrike.efkefc");
+            control.setSpeed(FastMath.nextRandomFloat());
+            node.addControl(control);
+            rootNode.attachChild(node);
+        }
+        cam.setLocation(new Vector3f(0, 40, 200));
     }
 }

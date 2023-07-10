@@ -35,7 +35,9 @@ vec4 sampleColor(in SAMPLER_COLOR tex,in vec2 tx) {
     #if defined(NUM_SAMPLES) && NUM_SAMPLES > 1
         vec4 c = vec4(0);
         ivec2 iTexC = ivec2(tx * vec2(textureSize(tex)));
-        for (int i = 0; i < NUM_SAMPLES; i++) c += texelFetch(tex, iTexC, i);
+        for (int i = 0; i < NUM_SAMPLES; i++) {
+            c += texelFetch(tex, iTexC, i);
+        }
         c /= float(NUM_SAMPLES);
     #else
         vec4 c = texture(tex,tx);
@@ -47,7 +49,9 @@ vec4 sampleDepth(in SAMPLER_DEPTH tex,in vec2 tx) {
     #if defined(NUM_SAMPLES) && NUM_SAMPLES > 1
         vec4 c = vec4(0);
         ivec2 iTexC = ivec2(tx * vec2(textureSize(tex)));
-        for (int i = 0; i < NUM_SAMPLES; i++) c += texelFetch(tex, iTexC, i);
+        for (int i = 0; i < NUM_SAMPLES; i++) {
+            c += texelFetch(tex, iTexC, i);
+        }
         c /= float(NUM_SAMPLES);
     #else
         vec4 c = texture(tex, tx);

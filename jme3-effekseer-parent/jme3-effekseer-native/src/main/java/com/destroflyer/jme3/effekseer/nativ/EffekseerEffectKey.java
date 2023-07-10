@@ -1,8 +1,9 @@
 package com.destroflyer.jme3.effekseer.nativ;
 
+import Effekseer.swig.EffekseerEffectCore;
 import com.jme3.asset.AssetKey;
 
-public class EffekseerEffectKey extends AssetKey<LoadedEffect> {
+public class EffekseerEffectKey extends AssetKey<EffekseerEffectCore> {
 
     public EffekseerEffectKey(String path) {
         super(path);

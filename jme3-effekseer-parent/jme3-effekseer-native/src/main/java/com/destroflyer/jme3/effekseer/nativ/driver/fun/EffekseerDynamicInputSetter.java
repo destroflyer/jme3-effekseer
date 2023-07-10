@@ -1,6 +1,6 @@
 package com.destroflyer.jme3.effekseer.nativ.driver.fun;
 
-public interface EffekseerDynamicInputSetterFun {
+public interface EffekseerDynamicInputSetter {
 
     void set(int index, float value);
 }
