@@ -12,6 +12,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 
+import java.util.LinkedList;
+
 public class TestApplicationNative extends SimpleApplication implements ActionListener {
 
     public static void main(String[] args) {
@@ -26,28 +28,41 @@ public class TestApplicationNative extends SimpleApplication implements ActionLi
         testApplication.start();
     }
 
+    private LinkedList<Node> nodes = new LinkedList<>();
+
     @Override
     public void simpleInitApp() {
         assetManager.registerLocator(TestParticleEffects.ASSET_ROOT, FileLocator.class);
         Effekseer.registerLoader(assetManager);
-        Effekseer.addToViewPort(viewPort, assetManager, context.getSettings().isGammaCorrection());
+        Effekseer.initialize(stateManager, viewPort, assetManager, context.getSettings().isGammaCorrection());
         for (int i = 0; i < 2; i++) {
-            Node node = new Node();
-            node.move((i - 0.5f) * 100, 0, 0);
-            EffekseerControl control = new EffekseerControl(assetManager, "samples/Pierre01/LightningStrike.efkefc");
-            control.setSpeed(FastMath.nextRandomFloat());
-            node.addControl(control);
-            rootNode.attachChild(node);
+            spawn(i - 0.5f);
         }
         cam.setLocation(new Vector3f(0, 40, 200));
+        inputManager.addMapping("spawn", new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addMapping("clear", new KeyTrigger(KeyInput.KEY_DELETE));
-        inputManager.addListener(this, "clear");
+        inputManager.addListener(this, "spawn", "clear");
     }
 
     @Override
     public void onAction(String name, boolean isPressed, float tpf) {
-        if (name.equals("clear") && isPressed) {
-            rootNode.detachAllChildren();
+        if (name.equals("spawn") && isPressed) {
+            spawn(FastMath.nextRandomFloat() - 0.5f);
+        } else if (name.equals("clear") && isPressed) {
+            for (Node node : nodes) {
+                rootNode.detachChild(node);
+            }
+            nodes.clear();
         }
+    }
+
+    private void spawn(float x) {
+        Node node = new Node();
+        node.move(x * 100, 0, 0);
+        EffekseerControl control = new EffekseerControl(assetManager, "samples/Pierre01/LightningStrike.efkefc");
+        control.setSpeed(FastMath.nextRandomFloat());
+        node.addControl(control);
+        rootNode.attachChild(node);
+        nodes.add(node);
     }
 }

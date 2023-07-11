@@ -8,24 +8,22 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue;
-import com.jme3.scene.Spatial;
 import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.Image.Format;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.jme3.texture.image.ColorSpace;
 
-import java.util.ArrayList;
-
 public class EffekseerProcessor implements SceneProcessor {
 
-    public EffekseerProcessor(AssetManager assetManager, boolean sRGB, boolean isOrthographic, boolean hasDepth) {
+    public EffekseerProcessor(EffekseerState effekseerState, AssetManager assetManager, boolean sRGB, boolean isOrthographic, boolean hasDepth) {
+        this.effekseerState = effekseerState;
         this.assetManager = assetManager;
         this.sRGB = sRGB;
         this.isOrthographic = isOrthographic;
         this.hasDepth = hasDepth;
-        controls = new ArrayList<>();
     }
+    private EffekseerState effekseerState;
     private AssetManager assetManager;
     private boolean sRGB;
     private boolean isOrthographic;
@@ -34,7 +32,6 @@ public class EffekseerProcessor implements SceneProcessor {
     private ViewPort viewPort;
     private EffekseerFrameBufferUtils frameBufferUtils;
     private boolean initialized;
-    private ArrayList<EffekseerControl> controls;
     private FrameBuffer renderTarget;
 
     @Override
@@ -57,21 +54,7 @@ public class EffekseerProcessor implements SceneProcessor {
 
     @Override
     public void preFrame(float tpf) {
-        for (EffekseerControl control : controls) {
-            // Ensure the native objects are properly cleanuped before garbage collection kicks in (and crashes)
-            if (viewPort.getScenes().stream().noneMatch(control::isChildOf)) {
-                control.destroy();
-            }
-        }
-        controls.clear();
-        for (Spatial scene : viewPort.getScenes()) {
-            scene.depthFirstTraversal(spatial -> {
-                EffekseerControl control = spatial.getControl(EffekseerControl.class);
-                if ((control != null) && control.isInitialized()) {
-                    controls.add(control);
-                }
-            });
-        }
+
     }
 
     @Override
@@ -82,7 +65,7 @@ public class EffekseerProcessor implements SceneProcessor {
     @Override
     public void postFrame(FrameBuffer out) {
         updateRenderTarget(out, sRGB);
-        for (EffekseerControl control : controls) {
+        for (EffekseerControl control : effekseerState.getControls()) {
             render(control, renderTarget);
         }
         frameBufferUtils.blitFrameBuffer(renderManager, renderTarget, out, true, hasDepth, viewPort.getCamera().getWidth(), viewPort.getCamera().getHeight());

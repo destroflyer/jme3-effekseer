@@ -59,6 +59,11 @@ public class EffekseerControl extends AbstractControl {
         }
     }
 
+    public void initialize(boolean sRGB) {
+        manager.initialize(sRGB);
+        initialized = true;
+    }
+
     public boolean isPlaying() {
         return instances.size() > 0;
     }
@@ -115,11 +120,6 @@ public class EffekseerControl extends AbstractControl {
     protected void controlUpdate(float tpf) {
         if (!play) {
             return;
-        }
-
-        if (!initialized) {
-            manager.initialize(Effekseer.IS_SRGB);
-            initialized = true;
         }
 
         Integer newHandle = driver.tryEmit(() -> manager.playEffect(effect));
