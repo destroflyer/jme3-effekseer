@@ -103,11 +103,11 @@ public class EffekseerControl extends AbstractControl {
         } else if (spatial == parent) {
             return true;
         } else {
-            Spatial nextS = spatial.getParent();
-            if (nextS == null) {
+            Spatial nextSpatial = spatial.getParent();
+            if (nextSpatial == null) {
                 return false;
             }
-            return isChildOf(nextS, parent);
+            return isChildOf(nextSpatial, parent);
         }
     }
 
@@ -154,6 +154,7 @@ public class EffekseerControl extends AbstractControl {
 
     void destroy() {
         manager.destroy();
+        effect.delete();
     }
 
     @Override
