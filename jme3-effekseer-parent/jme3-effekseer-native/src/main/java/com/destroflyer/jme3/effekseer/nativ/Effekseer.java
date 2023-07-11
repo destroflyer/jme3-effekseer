@@ -9,14 +9,6 @@ import com.jme3.system.Platform;
 
 public class Effekseer {
 
-    public static void registerLoader(AssetManager assetManager) {
-        assetManager.registerLoader(EffekseerLoader.class, "efkefc");
-    }
-
-    public static void unregisterLoader(AssetManager assetManager) {
-        assetManager.unregisterLoader(EffekseerLoader.class);
-    }
-
     public static void initialize(AppStateManager stateManager, ViewPort viewPort, AssetManager assetManager, boolean sRGB) {
         initialize(stateManager, viewPort, assetManager, sRGB, false);
     }
@@ -26,20 +18,20 @@ public class Effekseer {
     }
 
     public static void initialize(AppStateManager stateManager, ViewPort viewPort, AssetManager assetManager, boolean sRGB, boolean isOrthographic, boolean hasDepth) {
-        initalizeNativeLibrary();
+        NativeLibraryLoader.registerNativeLibrary("effekseer", Platform.Linux64, "native/linux/x86_64/libEffekseerNativeForJava.so");
+        NativeLibraryLoader.registerNativeLibrary("effekseer", Platform.Windows64, "native/windows/x86_64/EffekseerNativeForJava.dll");
+        NativeLibraryLoader.loadNativeLibrary("effekseer", true);
+        EffekseerBackendCore.InitializeAsOpenGL();
+
+        assetManager.registerLoader(EffekseerLoader.class, "efkefc");
+
         EffekseerState effekseerState = new EffekseerState(viewPort, sRGB);
         stateManager.attach(effekseerState);
         viewPort.addProcessor(new EffekseerProcessor(effekseerState, assetManager, sRGB, isOrthographic, hasDepth));
     }
 
-    private static void initalizeNativeLibrary() {
-        NativeLibraryLoader.registerNativeLibrary("effekseer", Platform.Linux64, "native/linux/x86_64/libEffekseerNativeForJava.so");
-        NativeLibraryLoader.registerNativeLibrary("effekseer", Platform.Windows64, "native/windows/x86_64/EffekseerNativeForJava.dll");
-        NativeLibraryLoader.loadNativeLibrary("effekseer", true);
-        EffekseerBackendCore.InitializeAsOpenGL();
-    }
-
-    public static void destroy() {
+    public static void unregister(AssetManager assetManager) {
+        assetManager.unregisterLoader(EffekseerLoader.class);
         EffekseerBackendCore.Terminate();
     }
 }

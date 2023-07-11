@@ -33,7 +33,6 @@ public class TestApplicationNative extends SimpleApplication implements ActionLi
     @Override
     public void simpleInitApp() {
         assetManager.registerLocator(TestParticleEffects.ASSET_ROOT, FileLocator.class);
-        Effekseer.registerLoader(assetManager);
         Effekseer.initialize(stateManager, viewPort, assetManager, context.getSettings().isGammaCorrection());
         for (int i = 0; i < 2; i++) {
             spawn(i - 0.5f);
