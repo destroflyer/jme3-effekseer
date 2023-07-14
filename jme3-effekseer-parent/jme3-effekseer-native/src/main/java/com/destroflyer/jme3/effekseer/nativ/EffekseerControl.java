@@ -109,7 +109,7 @@ public class EffekseerControl extends AbstractControl {
 
     @Override
     protected void controlUpdate(float tpf) {
-        if (!play) {
+        if ((manager == null) || !play) {
             return;
         }
 
