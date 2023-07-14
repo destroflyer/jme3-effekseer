@@ -62,19 +62,6 @@ public class EffekseerManager {
         state.core.Update(t);
     }
 
-    public void beginRender() {
-        beginRender((Collection<Spatial>) null);
-    }
-
-    /**
-     * Select a scene for rendering and update.
-     * @param parent Only effects that are child of the parent spatial (or attached to the parent spatial itself) will be updated and rendered
-     */
-    public void beginRender(Spatial parent) {
-        state.v1SpatialList.set(0, parent);
-        beginRender(state.v1SpatialList);
-    }
-
     private int getLayer(Spatial parent) {
         Integer layerId = parent.getUserData("_effekseer_layer");
         if (layerId == null) {
@@ -217,8 +204,14 @@ public class EffekseerManager {
     }
 
     public void registerEmitter(EffekseerControl control) {
-        state.emitters.put(control, new EmitterState());
-        control.setGarbagePile(state.garbagePile);
+        if (!state.emitters.containsKey(control)) {
+            state.emitters.put(control, new EmitterState());
+            control.setGarbagePile(state.garbagePile);
+        }
+    }
+
+    public void unregisterEmitter(EffekseerControl control) {
+        state.emitters.remove(control);
     }
 
     public void destroy() {

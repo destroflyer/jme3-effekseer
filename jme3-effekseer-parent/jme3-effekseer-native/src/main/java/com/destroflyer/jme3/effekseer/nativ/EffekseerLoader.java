@@ -20,7 +20,7 @@ public class EffekseerLoader implements AssetLoader {
 
     public static EffekseerEffectCore loadEffect(AssetManager assetManager, String path) throws IOException {
         InputStream inputStream = EffekseerStreamUtils.openStream(assetManager, "", path);
-        return loadEffect(assetManager,path,inputStream);
+        return loadEffect(assetManager, path, inputStream);
     }
 
     public static EffekseerEffectCore loadEffect(AssetManager assetManager, String path, InputStream inputStream) throws IOException {

@@ -25,15 +25,13 @@ public class EffekseerControl extends AbstractControl {
 
     public EffekseerControl(EffekseerEffectCore effect) {
         this.effect = effect;
-        manager = new EffekseerManager();
     }
     private ArrayList<Integer> instances = new ArrayList<>();
-    @Getter(AccessLevel.PACKAGE)
-    private EffekseerManager manager;
     private EffekseerEffectCore effect;
-    @Getter
-    private boolean initialized;
+    @Setter(AccessLevel.PACKAGE)
+    private EffekseerManager manager;
     private boolean play = true;
+    @Getter
     @Setter
     private float speed = 1;
     private int layer = 0;
@@ -46,8 +44,6 @@ public class EffekseerControl extends AbstractControl {
         super.setSpatial(spatial);
         if (spatial == null) {
             stop();
-        } else {
-            manager.registerEmitter(this);
         }
     }
 
@@ -57,11 +53,6 @@ public class EffekseerControl extends AbstractControl {
             manager.pauseEffect(i, !enabled);
             manager.setEffectVisibility(i, enabled);
         }
-    }
-
-    public void initialize(boolean sRGB) {
-        manager.initialize(sRGB);
-        initialized = true;
     }
 
     public boolean isPlaying() {
@@ -94,7 +85,7 @@ public class EffekseerControl extends AbstractControl {
     }
 
     boolean isChildOf(Spatial parent) {
-        return isChildOf(spatial,parent);
+        return isChildOf(spatial, parent);
     }
 
     private boolean isChildOf(Spatial spatial, Spatial parent) {
@@ -118,12 +109,11 @@ public class EffekseerControl extends AbstractControl {
 
     @Override
     protected void controlUpdate(float tpf) {
-        if (!initialized || !play) {
+        if (!play) {
             return;
         }
 
         Integer newHandle = driver.tryEmit(() -> manager.playEffect(effect));
-
         if (newHandle != null) {
             instances.add(newHandle);
             manager.setEffectLayer(newHandle, layer);
@@ -142,19 +132,12 @@ public class EffekseerControl extends AbstractControl {
             }
         }
 
-        float adjustedTpf = tpf * speed;
-        driver.update(adjustedTpf);
-        manager.update(adjustedTpf);
+        driver.update(tpf);
     }
 
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp) {
 
-    }
-
-    void destroy() {
-        manager.destroy();
-        effect.delete();
     }
 
     @Override

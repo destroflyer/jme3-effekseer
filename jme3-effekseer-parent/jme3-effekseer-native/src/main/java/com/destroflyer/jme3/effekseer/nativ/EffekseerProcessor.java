@@ -64,14 +64,12 @@ public class EffekseerProcessor implements SceneProcessor {
 
     @Override
     public void postFrame(FrameBuffer out) {
-        updateRenderTarget(out, sRGB);
-        for (EffekseerControl control : effekseerState.getControls()) {
-            render(control, renderTarget);
-        }
+        updateRenderTarget(out);
+        render(renderTarget);
         frameBufferUtils.blitFrameBuffer(renderManager, renderTarget, out, true, hasDepth, viewPort.getCamera().getWidth(), viewPort.getCamera().getHeight());
     }
 
-    private void updateRenderTarget(FrameBuffer in, boolean sRGB) {
+    private void updateRenderTarget(FrameBuffer in) {
         int width = viewPort.getCamera().getWidth();
         int height = viewPort.getCamera().getHeight();
 
@@ -99,7 +97,7 @@ public class EffekseerProcessor implements SceneProcessor {
         frameBufferUtils.bindFrameBuffer(renderManager, ofb);
     }
 
-    private void render(EffekseerControl control, FrameBuffer sceneBuffer) {
+    private void render(FrameBuffer sceneBuffer) {
         Camera camera = viewPort.getCamera();
         int width = camera.getWidth();
         int height = camera.getHeight();
@@ -110,9 +108,9 @@ public class EffekseerProcessor implements SceneProcessor {
 
         FrameBuffer oldFrameBuffer = frameBufferUtils.bindFrameBuffer(renderManager, sceneBuffer);
 
-        control.getManager().beginRender(viewPort.getScenes());
-        control.getManager().render(renderManager.getRenderer(), camera, sceneBuffer, scene, depth, isOrthographic);
-        control.getManager().endRender();
+        effekseerState.getManager().beginRender(viewPort.getScenes());
+        effekseerState.getManager().render(renderManager.getRenderer(), camera, sceneBuffer, scene, depth, isOrthographic);
+        effekseerState.getManager().endRender();
 
         frameBufferUtils.bindFrameBuffer(renderManager, oldFrameBuffer);
     }
