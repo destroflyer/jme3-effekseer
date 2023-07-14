@@ -32,10 +32,6 @@ public class EffekseerManager {
         private WeakReference<Spatial>[] bitLayers = new WeakReference[30];
         private float[] v16 = new float[16];
         private Matrix4f m4 = new Matrix4f();
-        private List<Spatial> v1SpatialList = new ArrayList<>(1);
-        {
-            v1SpatialList.add(null);
-        }
         private boolean asyncInit = false;
         private ConcurrentLinkedQueue<List<Integer>> garbagePile = new ConcurrentLinkedQueue<>();
     }
@@ -112,11 +108,9 @@ public class EffekseerManager {
         Texture sceneDepth,
         boolean isOrthographic
     ) {
-        if (!(renderer instanceof GLRenderer)) {
+        if (!(renderer instanceof GLRenderer gl)) {
             throw new RuntimeException("Only GLRenderer supported at this moment");
         }
-
-        GLRenderer gl = (GLRenderer) renderer;
         gl.setFrameBuffer(renderTarget);
 
         if (isOrthographic) {

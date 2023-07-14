@@ -26,11 +26,13 @@ public class EffekseerControl extends AbstractControl {
     public EffekseerControl(EffekseerEffectCore effect) {
         this.effect = effect;
     }
-    private ArrayList<Integer> instances = new ArrayList<>();
     private EffekseerEffectCore effect;
     @Setter(AccessLevel.PACKAGE)
     private EffekseerManager manager;
-    private boolean play = true;
+    @Getter(AccessLevel.PACKAGE)
+    private ArrayList<Integer> instances = new ArrayList<>();
+    @Getter
+    private boolean playing = true;
     @Getter
     @Setter
     private float speed = 1;
@@ -47,59 +49,18 @@ public class EffekseerControl extends AbstractControl {
         }
     }
 
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
-        for (int i : instances) {
-            manager.pauseEffect(i, !enabled);
-            manager.setEffectVisibility(i, enabled);
-        }
-    }
-
-    public boolean isPlaying() {
-        return instances.size() > 0;
-    }
-
     public void play() {
-        if (play) {
-            return;
-        }
-        instances.forEach(i -> manager.pauseEffect(i, false));
-        play = true;
+        playing = true;
     }
 
     public void pause() {
-        if (!play) {
-            return;
-        }
-        instances.forEach(i -> manager.pauseEffect(i, true));
-        play = false;
+        playing = false;
     }
 
     public void stop() {
-        if (!play) {
-            return;
-        }
         instances.forEach(manager::stopEffect);
         instances.clear();
-        play = false;
-    }
-
-    boolean isChildOf(Spatial parent) {
-        return isChildOf(spatial, parent);
-    }
-
-    private boolean isChildOf(Spatial spatial, Spatial parent) {
-        if (spatial == null) {
-            return false;
-        } else if (spatial == parent) {
-            return true;
-        } else {
-            Spatial nextSpatial = spatial.getParent();
-            if (nextSpatial == null) {
-                return false;
-            }
-            return isChildOf(nextSpatial, parent);
-        }
+        playing = false;
     }
 
     void setLayer(int layer) {
@@ -109,7 +70,7 @@ public class EffekseerControl extends AbstractControl {
 
     @Override
     protected void controlUpdate(float tpf) {
-        if ((manager == null) || !play) {
+        if ((manager == null) || !playing) {
             return;
         }
 
@@ -125,6 +86,9 @@ public class EffekseerControl extends AbstractControl {
                 driver.destroy(handle);
                 instances.remove(i);
                 i--;
+                if (instances.isEmpty()) {
+                    spatial.removeControl(this);
+                }
             } else {
                 driver.setDynamicInputs(handle, (index, value) -> manager.setDynamicInput(handle, index, value));
                 Transform transform = driver.getInstanceTransform(handle, spatial);
@@ -143,5 +107,23 @@ public class EffekseerControl extends AbstractControl {
     @Override
     public void finalize() {
         garbagePile.add(instances);
+    }
+
+    boolean isChildOf(Spatial parent) {
+        return isChildOf(spatial, parent);
+    }
+
+    private boolean isChildOf(Spatial spatial, Spatial parent) {
+        if (spatial == null) {
+            return false;
+        } else if (spatial == parent) {
+            return true;
+        } else {
+            Spatial nextSpatial = spatial.getParent();
+            if (nextSpatial == null) {
+                return false;
+            }
+            return isChildOf(nextSpatial, parent);
+        }
     }
 }

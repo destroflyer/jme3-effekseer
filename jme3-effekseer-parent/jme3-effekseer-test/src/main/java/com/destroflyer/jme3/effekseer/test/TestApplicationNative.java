@@ -10,9 +10,10 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 
-import java.util.LinkedList;
+import java.util.function.Consumer;
 
 public class TestApplicationNative extends SimpleApplication implements ActionListener {
 
@@ -28,8 +29,6 @@ public class TestApplicationNative extends SimpleApplication implements ActionLi
         testApplication.start();
     }
 
-    private LinkedList<Node> nodes = new LinkedList<>();
-
     @Override
     public void simpleInitApp() {
         assetManager.registerLocator(TestParticleEffects.ASSET_ROOT, FileLocator.class);
@@ -38,9 +37,11 @@ public class TestApplicationNative extends SimpleApplication implements ActionLi
             spawn(i - 0.5f);
         }
         cam.setLocation(new Vector3f(0, 40, 200));
-        inputManager.addMapping("spawn", new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addMapping("clear", new KeyTrigger(KeyInput.KEY_DELETE));
-        inputManager.addListener(this, "spawn", "clear");
+        inputManager.addMapping("spawn", new KeyTrigger(KeyInput.KEY_1));
+        inputManager.addMapping("clear", new KeyTrigger(KeyInput.KEY_2));
+        inputManager.addMapping("pause", new KeyTrigger(KeyInput.KEY_3));
+        inputManager.addMapping("play", new KeyTrigger(KeyInput.KEY_4));
+        inputManager.addListener(this, "spawn", "clear", "pause", "play");
     }
 
     @Override
@@ -48,10 +49,11 @@ public class TestApplicationNative extends SimpleApplication implements ActionLi
         if (name.equals("spawn") && isPressed) {
             spawn(FastMath.nextRandomFloat() - 0.5f);
         } else if (name.equals("clear") && isPressed) {
-            for (Node node : nodes) {
-                rootNode.detachChild(node);
-            }
-            nodes.clear();
+            rootNode.detachAllChildren();
+        } else if (name.equals("pause") && isPressed) {
+            forEachControl(EffekseerControl::pause);
+        } else if (name.equals("play") && isPressed) {
+            forEachControl(EffekseerControl::play);
         }
     }
 
@@ -62,6 +64,14 @@ public class TestApplicationNative extends SimpleApplication implements ActionLi
         control.setSpeed(FastMath.nextRandomFloat());
         node.addControl(control);
         rootNode.attachChild(node);
-        nodes.add(node);
+    }
+
+    private void forEachControl(Consumer<EffekseerControl> consumer) {
+        for (Spatial spatial : rootNode.getChildren()) {
+            EffekseerControl control = spatial.getControl(EffekseerControl.class);
+            if (control != null) {
+                consumer.accept(control);
+            }
+        }
     }
 }

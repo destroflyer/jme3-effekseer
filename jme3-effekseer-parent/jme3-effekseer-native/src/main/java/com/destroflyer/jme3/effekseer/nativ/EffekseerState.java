@@ -22,7 +22,7 @@ public class EffekseerState extends AbstractAppState {
     @Getter
     private EffekseerManager manager;
     private List<EffekseerControl> controls = new ArrayList<>();
-    private HashMap<Float, ArrayList<EffekseerControl>> tmpControlsGroupedBySpeed = new HashMap<>();
+    private HashMap<Float, ArrayList<EffekseerControl>> tmpPlayingControlsGroupedBySpeed = new HashMap<>();
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -44,11 +44,12 @@ public class EffekseerState extends AbstractAppState {
         controls.clear();
         for (Spatial scene : viewPort.getScenes()) {
             scene.depthFirstTraversal(spatial -> {
-                EffekseerControl control = spatial.getControl(EffekseerControl.class);
-                if (control != null) {
-                    manager.registerEmitter(control);
-                    control.setManager(manager);
-                    controls.add(control);
+                for (int i = 0; i < spatial.getNumControls(); i++) {
+                    if (spatial.getControl(i) instanceof EffekseerControl control) {
+                        manager.registerEmitter(control);
+                        control.setManager(manager);
+                        controls.add(control);
+                    }
                 }
             });
         }
@@ -60,26 +61,28 @@ public class EffekseerState extends AbstractAppState {
     // To improve performance, we can group the effects by speed (instead of updating each one alone)
     private void updateManager(float tpf) {
         for (EffekseerControl control : controls) {
-            tmpControlsGroupedBySpeed.computeIfAbsent(control.getSpeed(), s -> new ArrayList<>()).add(control);
+            if (control.isPlaying()) {
+                tmpPlayingControlsGroupedBySpeed.computeIfAbsent(control.getSpeed(), s -> new ArrayList<>()).add(control);
+            }
         }
-        tmpControlsGroupedBySpeed.forEach((speed, controlsWithEqualSpeed) -> {
+        tmpPlayingControlsGroupedBySpeed.forEach((speed, controlsWithEqualSpeed) -> {
             for (EffekseerControl control : controls) {
-                if (controlsWithEqualSpeed.contains(control)) {
-                    control.play();
-                } else {
-                    control.pause();
-                }
+                setEffectPaused(control, !controlsWithEqualSpeed.contains(control));
             }
             manager.update(tpf * speed);
         });
-        if (tmpControlsGroupedBySpeed.isEmpty()) {
+        if (tmpPlayingControlsGroupedBySpeed.isEmpty()) {
             manager.update(tpf);
         } else {
-            tmpControlsGroupedBySpeed.clear();
+            tmpPlayingControlsGroupedBySpeed.clear();
         }
         for (EffekseerControl control : controls) {
-            control.play();
+            setEffectPaused(control, !control.isPlaying());
         }
+    }
+
+    private void setEffectPaused(EffekseerControl control, boolean paused) {
+        control.getInstances().forEach(i -> manager.pauseEffect(i, paused));
     }
 
     @Override
