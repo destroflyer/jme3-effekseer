@@ -11,15 +11,15 @@
         <module>jme3-effekseer-test</module>
     </modules>
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>22</maven.compiler.source>
+        <maven.compiler.target>22</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <version.effekseer-native>81957c3</version.effekseer-native>
         <version.jme3-effekseer>0.0.1</version.jme3-effekseer>
-        <version.jdom>2.0.6</version.jdom>
-        <version.jme3>3.6.0-stable</version.jme3>
-        <version.lombok>1.18.28</version.lombok>
-        <version.maven-install-plugin>3.1.1</version.maven-install-plugin>
+        <version.jdom>2.0.6.1</version.jdom>
+        <version.jme3>3.6.1-stable</version.jme3>
+        <version.lombok>1.18.34</version.lombok>
+        <version.maven-install-plugin>3.1.2</version.maven-install-plugin>
     </properties>
     <dependencyManagement>
         <dependencies>
